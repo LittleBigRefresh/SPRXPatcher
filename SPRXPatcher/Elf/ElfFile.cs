@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -93,7 +93,11 @@ public class ElfFile {
         }
 
         // Write the sections
-        foreach (var sectionHeader in this.SectionHeaders) this.WriteSection(sectionHeader, bw);
+        foreach (var sectionHeader in this.SectionHeaders) {
+            if (sectionHeader.Type != ElfSectionHeader.SectionType.Nobits) {
+                this.WriteSection(sectionHeader, bw);
+            }
+        }
 
         // Seek to end
         bw.BaseStream.Seek(0, SeekOrigin.End);
